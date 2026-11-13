@@ -33,6 +33,39 @@ class TestUpdateProjectHealthMetricsScoreCommand:
             self.mock_bulk_save = bulk_save_patch
             yield
 
+    def test_missing_activity_dates_do_not_earn_points(self):
+        """Missing activity is unknown, even for a recently started project."""
+        metric = MagicMock(spec=ProjectHealthMetrics)
+        requirements = MagicMock(spec=ProjectHealthRequirements)
+        metric.project.level = requirements.level = "test_level"
+        metric.project.name = "Test Project"
+        for field in (
+            "age_days", "contributors_count", "forks_count",
+            "open_pull_requests_count", "recent_releases_count", "stars_count",
+            "total_pull_requests_count", "total_releases_count",
+        ):
+            setattr(metric, field, 0)
+            setattr(requirements, field, 1)
+        for field in (
+            "last_commit_days", "last_pull_request_days", "last_release_days",
+            "owasp_page_last_update_days",
+        ):
+            setattr(metric, field, None)
+            setattr(requirements, field, 365)
+        for field in ("open_issues_count", "unanswered_issues_count", "unassigned_issues_count"):
+            setattr(metric, field, 2)
+            setattr(requirements, field, 1)
+        metric.is_funding_requirements_compliant = False
+        metric.is_leader_requirements_compliant = False
+        requirements.is_funding_requirements_compliant = True
+        requirements.is_leader_requirements_compliant = True
+        self.mock_metrics.return_value.select_related.return_value = [metric]
+        self.mock_requirements.return_value = [requirements]
+
+        call_command("owasp_update_project_health_scores")
+
+        assert metric.score == 0
+
     def test_handle_successful_update(self):
         """Test successful metrics score update."""
         fields_weights = {

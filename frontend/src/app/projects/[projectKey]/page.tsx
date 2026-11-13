@@ -137,7 +137,8 @@ const ProjectDetailsPage = () => {
         title={project.name}
         isActive={project.isActive}
         isArchived={false}
-        showHealthMetrics={true}
+        showHealthMetrics={IS_PROJECT_HEALTH_ENABLED}
+        healthMetricsData={project.healthMetricsList}
       />
 
       <Summary summary={project.summary} />

@@ -32,15 +32,15 @@ export type HealthMetricsProps = {
   forksCount?: number
   isFundingRequirementsCompliant?: boolean
   isLeaderRequirementsCompliant?: boolean
-  lastCommitDays?: number
+  lastCommitDays?: number | null
   lastCommitDaysRequirement?: number
-  lastPullRequestDays?: number
+  lastPullRequestDays?: number | null
   lastPullRequestDaysRequirement?: number
-  lastReleaseDays?: number
+  lastReleaseDays?: number | null
   lastReleaseDaysRequirement?: number
   openIssuesCount?: number
   openPullRequestsCount?: number
-  owaspPageLastUpdateDays?: number
+  owaspPageLastUpdateDays?: number | null
   owaspPageLastUpdateDaysRequirement?: number
   projectName?: string
   projectKey?: string

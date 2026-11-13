@@ -16,7 +16,7 @@ const BarChart: React.FC<{
   title: string
   icon?: IconType
   labels: string[]
-  days: number[]
+  days: (number | null)[]
   requirements: number[]
   reverseColors?: boolean[]
 }> = ({ title, days, icon, requirements, labels, reverseColors }) => {
@@ -34,7 +34,7 @@ const BarChart: React.FC<{
 
   const seriesData: ApexBarChartDataSeries[] = days.map((day, index) => ({
     x: labels[index],
-    y: days[index],
+    y: day ?? 0,
     goals: [
       {
         name: 'Requirement',
@@ -78,6 +78,7 @@ const BarChart: React.FC<{
               const idx = opts?.dataPointIndex ?? 0
               const requirement = requirements[idx]
               const displayVal: string | number = Array.isArray(val) ? val[0] : val
+              if (days[idx] == null) return `N/A / ${requirement}`
               if (requirement !== undefined) {
                 return `${displayVal} / ${requirement}`
               }
@@ -86,6 +87,7 @@ const BarChart: React.FC<{
           },
           colors: [
             function ({ value, dataPointIndex }: { value: number; dataPointIndex: number }) {
+              if (days[dataPointIndex] == null) return themeColor
               const requirement = requirements[dataPointIndex]
               if (reverseColors?.[dataPointIndex]) {
                 if (value < requirement * 0.75) {
@@ -121,6 +123,13 @@ const BarChart: React.FC<{
         height={300}
         type="bar"
       />
+      {days.some((day) => day == null) && (
+        <ul className="mt-2 text-sm text-gray-500">
+          {days.map((day, index) =>
+            day == null ? <li key={labels[index]}>{labels[index]}: N/A</li> : null
+          )}
+        </ul>
+      )}
     </SecondaryCard>
   )
 }

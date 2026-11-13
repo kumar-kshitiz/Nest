@@ -21,7 +21,7 @@ export interface HeaderProps {
   mentors?: Array<{ login: string }>
   isActive?: boolean
   isArchived?: boolean
-  healthMetricsData?: Array<{ score?: number }>
+  healthMetricsData?: Array<{ score?: number | null }>
   showProgramActions?: boolean
   showModuleActions?: boolean
   showArchivedBadge?: boolean
@@ -90,9 +90,9 @@ const Header = ({
               IS_PROJECT_HEALTH_ENABLED &&
               healthMetricsData &&
               healthMetricsData.length > 0 &&
-              healthMetricsData[0].score !== undefined && (
+              healthMetricsData[healthMetricsData.length - 1].score != null && (
                 <MetricsScoreCircle
-                  score={healthMetricsData[0]?.score}
+                  score={healthMetricsData[healthMetricsData.length - 1].score!}
                   clickable={true}
                   onClick={() => scrollToAnchor('issues-trend')}
                 />

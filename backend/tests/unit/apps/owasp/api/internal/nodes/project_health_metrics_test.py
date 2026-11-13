@@ -74,7 +74,10 @@ class TestProjectHealthMetricsNode(GraphQLNodeBaseTest):
     def test_field_types(self, field_name, expected_type):
         field = self._get_field_by_name(field_name, ProjectHealthMetricsNode)
         assert field is not None
-        assert field.type is expected_type
+        if field_name in {"last_commit_days", "last_pull_request_days", "last_release_days", "owasp_page_last_update_days"}:
+            assert field.type.of_type is expected_type
+        else:
+            assert field.type is expected_type
 
 
 class TestProjectHealthMetricsNodeResolvers:

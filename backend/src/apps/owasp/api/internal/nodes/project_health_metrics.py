@@ -47,7 +47,7 @@ class ProjectHealthMetricsNode(strawberry.relay.Node):
         return root.nest_created_at
 
     @strawberry_django.field
-    def last_commit_days(self, root: ProjectHealthMetrics) -> int:
+    def last_commit_days(self, root: ProjectHealthMetrics) -> int | None:
         """Resolve last commit age in days."""
         return root.last_commit_days
 
@@ -57,7 +57,7 @@ class ProjectHealthMetricsNode(strawberry.relay.Node):
         return root.last_commit_days_requirement
 
     @strawberry_django.field
-    def last_pull_request_days(self, root: ProjectHealthMetrics) -> int:
+    def last_pull_request_days(self, root: ProjectHealthMetrics) -> int | None:
         """Resolve last pull request age in days."""
         return root.last_pull_request_days
 
@@ -67,7 +67,7 @@ class ProjectHealthMetricsNode(strawberry.relay.Node):
         return root.last_pull_request_days_requirement
 
     @strawberry_django.field
-    def last_release_days(self, root: ProjectHealthMetrics) -> int:
+    def last_release_days(self, root: ProjectHealthMetrics) -> int | None:
         """Resolve last release age in days."""
         return root.last_release_days
 
@@ -87,7 +87,7 @@ class ProjectHealthMetricsNode(strawberry.relay.Node):
         return root.project.name
 
     @strawberry_django.field
-    def owasp_page_last_update_days(self, root: ProjectHealthMetrics) -> int:
+    def owasp_page_last_update_days(self, root: ProjectHealthMetrics) -> int | None:
         """Resolve OWASP page last update age in days."""
         return root.owasp_page_last_update_days
 
